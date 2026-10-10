@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Timer</string>
+    <string name="death_date_button">Дата смерти</string>
+    <string name="you_will_die_in">Ты умрёшь через</string>
+    <string name="death_date_label">Дата смерти</string>
+    <string name="restart">Заново</string>
+    <string name="screen_title">TIMER</string>
+    <string name="time_is_up">Время вышло</string>
+</resources>

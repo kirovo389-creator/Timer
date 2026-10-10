@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_deep">#0B0B0F</color>
+    <color name="bg_panel">#14141A</color>
+    <color name="digit_idle">#8A8A93</color>
+    <color name="digit_dead">#FF2A2A</color>
+    <color name="blood_bright">#C41111</color>
+    <color name="blood_dark">#1A0303</color>
+    <color name="accent">#1C1C22</color>
+    <color name="text_primary">#F2F2F5</color>
+    <color name="text_muted">#6E6E78</color>
+</resources>
