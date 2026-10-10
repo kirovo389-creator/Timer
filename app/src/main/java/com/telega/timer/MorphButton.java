@@ -66,11 +66,13 @@ public class MorphButton extends View {
     /** Текст, уходящий в текущем морфе. */
     private CharSequence outgoingText = "";
 
-    private int accentColor = DEFAULT_ACCENT;
     /** Цвет, от которого считаем текущий кадр. */
     private int currentColor = DEFAULT_ACCENT;
     /** Целевой цвет (для морфа и для {@link #setAccentColor(int)}). */
     private int pendingColor = DEFAULT_ACCENT;
+
+    /** Базовый цвет кнопки — то, к чему возвращаемся, когда морф не задаёт новый. */
+    private int baseColor = DEFAULT_ACCENT;
 
     private float morphFraction = 1f;
     private boolean morphing = false;
@@ -139,11 +141,11 @@ public class MorphButton extends View {
     }
 
     /**
-     * Плавно заменить текст за durationMs, не меняя цвет фона.
-     * Делегирует в {@link #morphTo(CharSequence, long, int)} с текущим целевым цветом.
+     * Плавно заменить текст за durationMs, возвращая фон к базовому цвету.
+     * Делегирует в {@link #morphTo(CharSequence, long, int)} с {@link #baseColor}.
      */
     public void morphTo(CharSequence text, long durationMs) {
-        morphTo(text, durationMs, pendingColor);
+        morphTo(text, durationMs, baseColor);
     }
 
     /**
@@ -237,7 +239,7 @@ public class MorphButton extends View {
 
     /** Установить цвет фона кнопки мгновенно, без анимации. */
     public void setAccentColor(int color) {
-        accentColor = color;
+        baseColor = color;
         pendingColor = color;
         if (!morphing) {
             currentColor = color;

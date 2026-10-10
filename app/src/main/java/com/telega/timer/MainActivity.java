@@ -165,10 +165,13 @@ public class MainActivity extends Activity {
                 }));
     }
 
+    /** Один генератор на всё приложение: иначе два нажатия в одну миллисекунду
+     *  дали бы одинаковый «остаток жизни». */
+    private static final Random RNG = new Random();
+
     /** Случайный остаток жизни: от 1 года до 60 лет. */
     private long randomLifetimeMs() {
-        Random random = new Random();
-        double years = 1.0d + random.nextDouble() * 59.0d;
+        double years = 1.0d + RNG.nextDouble() * 59.0d;
         return (long) (years * 365.2425d * 24d * 3600d * 1000d);
     }
 

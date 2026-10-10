@@ -177,8 +177,8 @@ public class DeathClockView extends View {
 
     public DeathClockView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        // раскладка считается в onSizeChanged (в конструкторе ширина ещё нулевая)
         initPaints();
-        recomputeLayout();
     }
 
     // ==================================================================
@@ -843,11 +843,9 @@ public class DeathClockView extends View {
         final float units = count * DIGIT_SLOTS_PER_GROUP + (count - 1) * SEP_WIDTH_RATIO;
         slotWidth = contentW / units;
 
-        // пробные замеры моношрифта
+        // пробный замер моношрифта: сколько пикселей занимает одна позиция цифры
         digitPaint.setTextSize(PROBE_SIZE);
         final float probeAdvance = Math.max(1f, digitPaint.measureText("0"));
-        digitPaint.getTextBounds(DIGITS, 0, DIGITS.length(), textBounds);
-        final float probeInk = Math.max(1f, textBounds.height());
 
         // размер по ширине и, при необходимости, уменьшение по высоте
         applyTextSize(PROBE_SIZE * slotWidth / probeAdvance);
