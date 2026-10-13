@@ -2,11 +2,15 @@ name: Build Timer APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: timer-android-build-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -29,12 +33,38 @@ jobs:
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Show APK
-        run: ls -la app/build/outputs/apk/debug/
+      - name: Prepare release APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          cp app/build/outputs/apk/debug/app-debug.apk "release/Timer-v1.2-${GITHUB_RUN_NUMBER}.apk"
+          test -s "release/Timer-v1.2-${GITHUB_RUN_NUMBER}.apk"
+          sha256sum "release/Timer-v1.2-${GITHUB_RUN_NUMBER}.apk" | tee release/SHA256SUMS.txt
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: timer-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: timer-v1.2-debug-apk
+          path: release/*
           if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish APK to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: timer-build-${{ github.run_number }}
+          name: Timer v1.2 — Build ${{ github.run_number }}
+          body: |
+            ## Timer v1.2
+
+            Обновлённый тёмный интерфейс, аккуратная типографика, градиентный фон,
+            карточка живого отсчёта и плавное появление экрана.
+
+            APK автоматически собран GitHub Actions. SHA-256 находится в SHA256SUMS.txt.
+          files: |
+            release/Timer-v1.2-${{ github.run_number }}.apk
+            release/SHA256SUMS.txt
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
